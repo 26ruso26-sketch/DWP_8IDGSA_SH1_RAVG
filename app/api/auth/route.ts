@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import { SistemaTorneoDB } from '../../../lib/db';
 
-// Instanciamos la clase de la base de datos (Aplicando POO)
 const sistemaDB = new SistemaTorneoDB();
 
 export async function POST(request: Request) {
@@ -13,11 +12,10 @@ export async function POST(request: Request) {
     if (accion === 'registrar') {
       if (respuestaHumana !== '12') {
         return NextResponse.json(
-          { error: "Validación Humana Fallida: La respuesta es incorrecta. Demuestra que eres humano." },
+          { error: "Validación Humana Fallida: La respuesta es incorrecta." },
           { status: 400 }
         );
       }
-
       const mensajeExito = sistemaDB.registrarUsuario(correo, password);
       return NextResponse.json({ success: true, message: mensajeExito });
     }
@@ -33,10 +31,22 @@ export async function POST(request: Request) {
         );
       }
 
-      return NextResponse.json({ 
+      // CREAMOS LA RESPUESTA DE ÉXITO
+      const response = NextResponse.json({ 
         success: true, 
-        message: "Acceso concedido al Torneo de Pump It Up." 
+        message: "Acceso concedido al Torneo." 
       });
+
+      // ESTO ES LO NUEVO: Creamos una Cookie de seguridad HTTP (El gafete)
+      response.cookies.set('sesion_torneo', 'activa', {
+        httpOnly: true, // Evita que los hackers la lean con JavaScript
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        path: '/',
+        maxAge: 60 * 60 * 24 // Dura 1 día
+      });
+
+      return response;
     }
 
     return NextResponse.json({ error: "Acción no permitida." }, { status: 400 });
