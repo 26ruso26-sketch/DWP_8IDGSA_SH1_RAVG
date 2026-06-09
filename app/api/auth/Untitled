@@ -1,0 +1,52 @@
+import { NextResponse } from 'next/server';
+import { SistemaTorneoDB } from '../../../lib/db';
+
+// Esto crea el objeto que controlará la conexión a SQLite
+const sistemaDB = new SistemaTorneoDB();
+
+export async function POST(request: Request) {
+  try {
+    const body = await request.json();
+    const { accion, correo, password, respuestaHumana } = body;
+
+    // --- FLUJO DE REGISTRO ---
+    if (accion === 'registrar') {
+      // 1. CAPA DE VALIDACIÓN HUMANA 
+      // usamos operacion matemática para asegurar que no es un bot
+      if (respuestaHumana !== '12') {
+        return NextResponse.json(
+          { error: "Validación Humana Fallida: La respuesta es incorrecta." },
+          { status: 400 }
+        );
+      }
+
+      // 2. LLAMADA AL BACKEND 
+      // Delegamos la validación del correo y contraseña al método de la clase
+      const mensajeExito = sistemaDB.registrarUsuario(correo, password);
+      return NextResponse.json({ success: true, message: mensajeExito });
+    }
+
+    // --- FLUJO DE INICIO DE SESIÓN ---
+    if (accion === 'login') {
+      // Llamamos al método de la clase para verificar datos de login
+      const usuario = sistemaDB.validarLogin(correo, password);
+      
+      if (!usuario) {
+        return NextResponse.json(
+          { error: "Datos incorrectas o el usuario no existe." },
+          { status: 401 }
+        );
+      }
+
+      return NextResponse.json({ 
+        success: true, 
+        message: "Acceso concedido al Torneo de Pump It Up." 
+      });
+    }
+
+    return NextResponse.json({ error: "Acción no permitida." }, { status: 400 });
+
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 400 });
+  }
+}
