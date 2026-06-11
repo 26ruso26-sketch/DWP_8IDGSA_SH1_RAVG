@@ -30,26 +30,31 @@ export default function MapaDelSitio() {
           <div className="border-l-2 border-cyan-500 pl-4 mt-6">
             <h2 className="text-cyan-400 font-bold text-lg mb-2">📁 Zona Privada (Dashboard)</h2>
             <ul className="space-y-2 text-gray-300 ml-4">
-              <li>📄 <span className="text-white">/dashboard</span> (Inicio del Torneo)</li>
+              <li>📄 <span className="text-white">/dashboard</span> (Registro y Búsqueda de Jugadores)</li>
               <ul className="ml-6 space-y-1 text-gray-500">
-                <li>↳ Categoría Speed</li>
-                <li>↳ Categoría Freestyle</li>
-              </ul>
-              
-              <li className="pt-2">📄 <span className="text-white">Secciones Principales de Navegación</span></li>
-              <ul className="ml-6 space-y-1 text-gray-500">
-                <li>↳ Torneo (Reglas y llaves)</li>
-                <li>↳ Participantes (Lista de competidores)</li>
+                <li>↳ Formulario de Inscripción (Con opción Pro o Freestyle)</li>
+                <li>↳ Búsqueda de jugadores por nombre</li>
+                <li>↳ Lista Oficial de Competidores</li>
               </ul>
 
-              <li className="pt-2">📄 <span className="text-white">Elementos Adicionales (Requeridos)</span></li>
+              <li className="pt-2">📄 <span className="text-white">/dashboard/categorias</span> (Categorización del Torneo)</li>
+              <ul className="ml-6 space-y-1 text-gray-500">
+                <li>↳ Asignación Automática Aleatoria ('Pro' o 'Freestyle')</li>
+                <li>↳ Estadísticas por Categoría</li>
+                <li>↳ Jugadores agrupados por clasificación</li>
+              </ul>
+              
+              <li className="pt-2">📄 <span className="text-white">/dashboard/jugadores</span></li>
+              <ul className="ml-6 space-y-1 text-gray-500">
+                <li>↳ Redirección automática a /dashboard</li>
+              </ul>
+
+              <li className="pt-2">📄 <span className="text-white">Elementos Adicionales (Interactivos)</span></li>
               <ul className="ml-6 space-y-1 text-gray-500">
                 <li>↳ Recuperación de contraseña</li>
-                <li>↳ Ayuda</li>
-                <li>↳ Buzón</li>
-                <li>↳ Contáctanos</li>
-                <li>↳ Barra de Búsquedas en el sitio</li>
-                <li>↳ Chat de Soporte Flotante</li>
+                <li>↳ Ayuda (Modal de contacto al organizador: ravg@gmail.com)</li>
+                <li>↳ Buzón (Modal con formulario de comentarios y quejas)</li>
+                <li>↳ Barra de Búsqueda de Jugadores en cabecera</li>
               </ul>
             </ul>
           </div>

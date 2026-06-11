@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 export default function Acceso() {
@@ -8,26 +8,40 @@ export default function Acceso() {
   const [correo, setCorreo] = useState("");
   const [password, setPassword] = useState("");
   const [respuestaHumana, setRespuestaHumana] = useState("");
+  const [num1, setNum1] = useState(0);
+  const [num2, setNum2] = useState(0);
   const [error, setError] = useState("");
   const [mensaje, setMensaje] = useState("");
   const router = useRouter();
+
+  // Genera una suma aleatoria para la comprobación humana
+  const generarComprobacion = () => {
+    setNum1(Math.floor(Math.random() * 10) + 1);
+    setNum2(Math.floor(Math.random() * 10) + 1);
+  };
+
+  useEffect(() => {
+    if (!isLogin) {
+      generarComprobacion();
+    }
+  }, [isLogin]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     setMensaje("");
 
-    // 1. VALIDACIÓN FRONTEND (Punto requerido por la rúbrica)
+    // 1. VALIDACIÓN FRONTEND (Coloquial)
     if (!correo || !password) {
-      setError("Error Frontend: Todos los campos son obligatorios.");
+      setError("¡Hey! No te saltes campos, todos son necesarios.");
       return;
     }
     if (!correo.includes("@")) {
-      setError("Error Frontend: Ingresa un correo electrónico válido.");
+      setError("Ese correo se ve un poco raro, ¿podrías revisarlo?");
       return;
     }
     if (!isLogin && !respuestaHumana) {
-      setError("Error Frontend: Debes completar la validación humana.");
+      setError("No olvides responder la pregunta para comprobar que no eres un robot.");
       return;
     }
 
@@ -35,7 +49,7 @@ export default function Acceso() {
     const accion = isLogin ? "login" : "registrar";
     const body = isLogin 
       ? { accion, correo, password } 
-      : { accion, correo, password, respuestaHumana };
+      : { accion, correo, password, respuestaHumana, num1, num2 };
 
     try {
       const res = await fetch("/api/auth", {
@@ -48,6 +62,7 @@ export default function Acceso() {
 
       if (!res.ok) {
         setError(data.error); // Muestra los errores del Backend o Humana
+        if (!isLogin) generarComprobacion(); // Regenera en caso de fallo
         return;
       }
 
@@ -63,11 +78,11 @@ export default function Acceso() {
         setTimeout(() => {
           setIsLogin(true);
           setRespuestaHumana("");
-          setMensaje("Registro exitoso. Ahora puedes iniciar sesión.");
+          setMensaje("¡Súper! Ya te registraste. Ahora inicia sesión para entrar al torneo.");
         }, 2000);
       }
     } catch (err) {
-      setError("Error de conexión con el servidor.");
+      setError("¡Híjole! No pudimos conectar con el servidor. Revisa tu internet.");
     }
   };
 
@@ -119,14 +134,14 @@ export default function Acceso() {
           {!isLogin && (
             <div className="p-4 bg-gray-800/80 border border-cyan-800 rounded">
               <label className="block text-xs font-bold text-cyan-400 uppercase tracking-wide mb-2">
-                Validación Humana: ¿Cuánto es 7 + 5?
+                Comprobación humana: ¿Cuánto es {num1} + {num2}?
               </label>
               <input
                 type="text"
                 value={respuestaHumana}
                 onChange={(e) => setRespuestaHumana(e.target.value)}
                 className="w-full p-2 bg-gray-900 border border-cyan-900 rounded text-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
-                placeholder="Escribe el número aquí"
+                placeholder="Pon el resultado aquí"
               />
             </div>
           )}

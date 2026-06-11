@@ -42,22 +42,38 @@ export class SistemaTorneoDB {
       )
     `;
     this.db.prepare(queryJugadores).run();
+
+    // Sembrar 5 jugadores mexicanos si la tabla está vacía
+    const countResult = this.db.prepare('SELECT COUNT(*) as count FROM jugadores').get() as { count: number };
+    if (countResult && countResult.count === 0) {
+      const jugadoresSemilla = [
+        { nombre: 'Juan Carlos Pérez', categoria: 'Pro' },
+        { nombre: 'Ximena Hernández', categoria: 'Freestyle' },
+        { nombre: 'Miguel Ángel Rodríguez', categoria: 'Pro' },
+        { nombre: 'Sofía Guadalupe Ruiz', categoria: 'Freestyle' },
+        { nombre: 'Francisco Javier López', categoria: 'Pro' }
+      ];
+      const insertStmt = this.db.prepare('INSERT INTO jugadores (nombre, categoria) VALUES (?, ?)');
+      for (const jugador of jugadoresSemilla) {
+        insertStmt.run(jugador.nombre, jugador.categoria);
+      }
+    }
   }
 
   public registrarUsuario(correo: string, password: string): string {
     if (!correo || !correo.includes('@')) {
-      throw new Error("Error de Backend: El correo no tiene un formato válido.");
+      throw new Error("Ese correo se ve un poco raro, ¿podrías revisarlo?");
     }
     if (password.length < 4) {
-      throw new Error("Error de Backend: La contraseña es demasiado corta.");
+      throw new Error("¡La contraseña está muy cortita! Debe tener al menos 4 caracteres.");
     }
 
     try {
       const stmt = this.db.prepare('INSERT INTO usuarios (correo, password) VALUES (?, ?)');
       stmt.run(correo, password);
-      return "Jugador registrado con éxito en el torneo.";
+      return "¡Listo! Ya quedaste registrado para el torneo. ¡Prepárate para bailar!";
     } catch (error) {
-      throw new Error("Error de Backend: Este correo ya está registrado en el torneo.");
+      throw new Error("¡Oye! Ese correo ya está registrado. ¿No será que ya tienes cuenta?");
     }
   }
 
@@ -75,12 +91,12 @@ export class SistemaTorneoDB {
     return stmt.all() as Jugador[];
   }
 
-  public agregarJugador(nombre: string): void {
+  public agregarJugador(nombre: string, categoria: string | null = null): void {
     if (!nombre || nombre.trim() === '') {
-      throw new Error("El nombre del jugador no puede estar vacío.");
+      throw new Error("¡Oye! El nombre del jugador no puede estar vacío. Ponle un nombre chido.");
     }
-    const stmt = this.db.prepare('INSERT INTO jugadores (nombre, categoria) VALUES (?, NULL)');
-    stmt.run(nombre.trim());
+    const stmt = this.db.prepare('INSERT INTO jugadores (nombre, categoria) VALUES (?, ?)');
+    stmt.run(nombre.trim(), categoria || null);
   }
 
   public actualizarCategoriaJugador(id: number, categoria: string): void {

@@ -6,13 +6,14 @@ const sistemaDB = new SistemaTorneoDB();
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { accion, correo, password, respuestaHumana } = body;
+    const { accion, correo, password, respuestaHumana, num1, num2 } = body;
 
     // --- FLUJO DE REGISTRO ---
     if (accion === 'registrar') {
-      if (respuestaHumana !== '12') {
+      const sumCorrecta = parseInt(num1) + parseInt(num2);
+      if (parseInt(respuestaHumana) !== sumCorrecta) {
         return NextResponse.json(
-          { error: "Validación Humana Fallida: La respuesta es incorrecta." },
+          { error: "¡Ups! Esa no es la respuesta correcta de la suma. Inténtalo de nuevo." },
           { status: 400 }
         );
       }
@@ -26,7 +27,7 @@ export async function POST(request: Request) {
       
       if (!usuario) {
         return NextResponse.json(
-          { error: "Credenciales incorrectas o el usuario no existe." },
+          { error: "Híjole, el correo o la contraseña no coinciden. Revisa bien tus datos." },
           { status: 401 }
         );
       }
@@ -34,7 +35,7 @@ export async function POST(request: Request) {
       // CREAMOS LA RESPUESTA DE ÉXITO
       const response = NextResponse.json({ 
         success: true, 
-        message: "Acceso concedido al Torneo." 
+        message: "Acceso concedido" 
       });
 
       // ESTO ES LO NUEVO: Creamos una Cookie de seguridad HTTP (El gafete)

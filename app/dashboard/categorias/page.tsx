@@ -37,7 +37,7 @@ export default function CategoriasPage() {
           Categorización del Torneo
         </h1>
         <p className="text-gray-400 mt-2">
-          Visualiza los competidores clasificados. Los participantes nuevos sin categoría asignada son asignados automáticamente al ingresar a esta página.
+          Echa un vistazo a cómo van las categorías del torneo. Si algún jugador no tiene categoría, aquí se le asignará una al azar al instante. ¡Qué emoción!
         </p>
       </div>
 
@@ -45,19 +45,19 @@ export default function CategoriasPage() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
         <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 shadow-md shadow-black/40 relative overflow-hidden">
           <div className="absolute top-0 left-0 w-full h-0.5 bg-gray-500"></div>
-          <p className="text-gray-400 text-xs font-bold uppercase tracking-wider">Total Participantes</p>
+          <p className="text-gray-400 text-xs font-bold uppercase tracking-wider">Total de Competidores</p>
           <p className="text-4xl font-black text-white mt-2 font-mono">{totalJugadores}</p>
         </div>
 
-        <div className="bg-gray-900 border border-fuchsia-950 rounded-xl p-6 shadow-md shadow-fuchsia-950/10 relative overflow-hidden">
-          <div className="absolute top-0 left-0 w-full h-0.5 bg-fuchsia-500"></div>
-          <p className="text-fuchsia-400 text-xs font-bold uppercase tracking-wider">Categoría Pro (Speed)</p>
+        <div className="bg-gray-900 border border-fuchsia-955 rounded-xl p-6 shadow-md shadow-fuchsia-950/10 relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-full h-0.5 bg-fuchsia-505"></div>
+          <p className="text-fuchsia-400 text-xs font-bold uppercase tracking-wider">Categoría Pro (Velocidad)</p>
           <p className="text-4xl font-black text-white mt-2 font-mono">{totalPro}</p>
         </div>
 
-        <div className="bg-gray-900 border border-cyan-950 rounded-xl p-6 shadow-md shadow-cyan-950/10 relative overflow-hidden">
-          <div className="absolute top-0 left-0 w-full h-0.5 bg-cyan-500"></div>
-          <p className="text-cyan-400 text-xs font-bold uppercase tracking-wider">Categoría Freestyle</p>
+        <div className="bg-gray-900 border border-cyan-955 rounded-xl p-6 shadow-md shadow-cyan-950/10 relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-full h-0.5 bg-cyan-505"></div>
+          <p className="text-cyan-400 text-xs font-bold uppercase tracking-wider">Categoría Freestyle (Estilo)</p>
           <p className="text-4xl font-black text-white mt-2 font-mono">{totalFreestyle}</p>
         </div>
       </div>
@@ -65,13 +65,13 @@ export default function CategoriasPage() {
       {/* Listado Principal de Clasificación */}
       <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 shadow-lg shadow-black/40">
         <h2 className="text-xl font-bold text-white mb-6 uppercase tracking-wider border-b border-gray-800 pb-2">
-          Competidores y su Clasificación
+          Clasificación Actual de Jugadores
         </h2>
 
         {jugadores.length === 0 ? (
           <div className="text-center py-12 text-gray-500">
             <span className="text-4xl block mb-2">🎮</span>
-            No hay jugadores registrados en el torneo actualmente.
+            ¡Uy! No tenemos jugadores registrados para clasificar todavía.
           </div>
         ) : (
           <div className="grid md:grid-cols-2 gap-6">
@@ -93,7 +93,7 @@ export default function CategoriasPage() {
                   </li>
                 ))}
                 {totalPro === 0 && (
-                  <p className="text-xs text-gray-500 italic text-center py-4">No hay jugadores asignados a Pro.</p>
+                  <p className="text-xs text-gray-500 italic text-center py-4">Todavía nadie anda en la categoría Pro.</p>
                 )}
               </ul>
             </div>
@@ -116,7 +116,7 @@ export default function CategoriasPage() {
                   </li>
                 ))}
                 {totalFreestyle === 0 && (
-                  <p className="text-xs text-gray-500 italic text-center py-4">No hay jugadores asignados a Freestyle.</p>
+                  <p className="text-xs text-gray-500 italic text-center py-4">Todavía nadie anda en Freestyle.</p>
                 )}
               </ul>
             </div>
