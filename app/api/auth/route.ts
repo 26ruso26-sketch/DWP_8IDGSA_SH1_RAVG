@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { SistemaTorneoDB } from '../../../lib/db';
+import { SistemaTorneoDB } from '../../../Lib/db';
 
 const sistemaDB = new SistemaTorneoDB();
 
